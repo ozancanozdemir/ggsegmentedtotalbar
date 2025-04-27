@@ -1,1 +1,1 @@
-# ggsegmentedtotalbar
+# ggsegmentedtotalbar R package<img width = 150px height = 150px src="[https://user-images.githubusercontent.com/67192157/97783151-22ee0280-1b96-11eb-9b78-2ba02395c5c8.png](https://github.com/user-attachments/assets/73d1a505-64c0-4329-9bf3-01c203412662)" align="right" />
