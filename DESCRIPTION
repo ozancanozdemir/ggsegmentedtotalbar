@@ -1,0 +1,31 @@
+Package: ggsegmentedtotalbar
+Type: Package
+Title: Create a Segmented Total Bar Plot with Custom Annotations and Labels
+Version: 0.1.0
+Authors@R: person(given = "Ozancan",
+                  family = "Ozdemir",
+                  role = c("aut", "cre"),
+                  email = "ozancanozdemir@gmail.com")
+Description: It provides a better alternative for stacked bar plot by creating a segmented total bar plot with custom annotations and labels. It is useful for visualizing the total of a variable and its segments in a single bar, making it easier to compare the segments and their contributions to the total.
+License: MIT + file LICENSE
+URL: https://github.com/ozancanozdemir/ggsegmentedtotalbar
+BugReports: https://github.com/ozancanozdemir/ggsegmentedtotalbar/issues
+Depends:
+    R (>= 4.0)
+Imports:
+    ggplot2,
+    grid,
+    forcats
+Suggests: 
+    testthat (>= 3.0.0),
+    devtools,
+    remotes,
+    roxygen2,
+    usethis,
+    knitr,
+    rmarkdown
+Encoding: UTF-8
+LazyData: true
+Config/testthat/edition: 3
+RoxygenNote: 7.2.3
+VignetteBuilder: knitr
