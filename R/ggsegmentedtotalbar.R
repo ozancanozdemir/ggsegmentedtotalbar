@@ -14,7 +14,7 @@ utils::globalVariables(".data")
 #' @param group A string specifying the column name for the grouping variable.
 #' @param segment A string specifying the column name for the segmenting variable (used for fill color).
 #' @param value A string specifying the column name for the value variable (used for the bar heights).
-#' @param total A string specifying the column name for the total variable (used for determining the background box height).
+#' @param total A string specifying the column name for the total variable (used for determining the background box height). If not specified, the sum of values for each group is used.
 #' @param alpha A numeric value (between 0 and 1) controlling the transparency of the background boxes. Default is 0.3.
 #' @param color A string specifying the color of the background boxes. Default is "lightgrey".
 #' @param label Logical. If `TRUE`, adds labels showing total values above the boxes and value labels on each segment. Default is `FALSE`.
@@ -38,6 +38,11 @@ ggsegmentedtotalbar <- function(df, group, segment, value, total,
                                 alpha = 0.3, color = "lightgrey",
                                 label = FALSE, label_size = 4, label_color = "black") {
 
+  if(missing(total)) {
+    total_value <- sapply(unique(df[[group]]), function(x){sum(df[value][df[group] == x], na.rm = TRUE)})
+    df <- merge(df, data.frame(group = names(total_value), total = total_value), by.x = group, by.y = "group",suffixes = c("", ".y"))
+    total <- names(df)[length(names(df))]
+  }
   # Order group variable by total value
   df[[group]] <- forcats::fct_reorder(df[[group]], df[[total]], .fun = max, .desc = TRUE)
 
