@@ -43,7 +43,7 @@ ggsegmentedtotalbar <- function(df, group, segment, value, total,
 
   # Base plot
   p <- ggplot2::ggplot(df, ggplot2::aes(x = .data[[group]], y = .data[[value]], fill = .data[[segment]])) +
-    ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.9)) +
+    ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.9), alpha = 1) +
     ggplot2::labs(title = "Segmented Total Bar Plot") +
     ggplot2::theme_minimal() +
     ggplot2::ylim(0, round(max(df[[total]]) + max(df[[total]]) * 0.15))
@@ -61,6 +61,8 @@ ggsegmentedtotalbar <- function(df, group, segment, value, total,
 
   # Combine plot and boxes
   p_final <- Reduce(`+`, c(list(p), box_grobs))
+  p_final <- p_final +
+    ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.9))
 
   # Add labels if requested
   if (label) {
