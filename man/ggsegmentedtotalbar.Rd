@@ -14,7 +14,9 @@ ggsegmentedtotalbar(
   color = "lightgrey",
   label = FALSE,
   label_size = 4,
-  label_color = "black"
+  label_color = "black",
+  reoder = TRUE,
+  .desc = TRUE
 )
 }
 \arguments{
@@ -37,6 +39,10 @@ ggsegmentedtotalbar(
 \item{label_size}{Numeric. Text size for the labels. Default is 4.}
 
 \item{label_color}{A string specifying the color of the labels. Default is "black".}
+
+\item{reoder}{Logical. If `TRUE`, sort by total value in ascending or descending order. The sorting behavior is specified in .desc.}
+
+\item{.desc}{Logical. If `TRUE`, sort in descending order by total value.}
 }
 \value{
 A ggplot object displaying the segmented bar plot with optional annotations and labels.

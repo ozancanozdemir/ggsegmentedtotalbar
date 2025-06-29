@@ -20,6 +20,8 @@ utils::globalVariables(".data")
 #' @param label Logical. If `TRUE`, adds labels showing total values above the boxes and value labels on each segment. Default is `FALSE`.
 #' @param label_size Numeric. Text size for the labels. Default is 4.
 #' @param label_color A string specifying the color of the labels. Default is "black".
+#' @param reoder Logical. If `TRUE`, sort by total value in ascending or descending order. The sorting behavior is specified in .desc.
+#' @param .desc Logical. If `TRUE`, sort in descending order by total value.
 #'
 #' @return A ggplot object displaying the segmented bar plot with optional annotations and labels.
 #'
@@ -36,10 +38,12 @@ utils::globalVariables(".data")
 #' @export
 ggsegmentedtotalbar <- function(df, group, segment, value, total,
                                 alpha = 0.3, color = "lightgrey",
-                                label = FALSE, label_size = 4, label_color = "black") {
+                                label = FALSE, label_size = 4, label_color = "black",
+                                reoder = TRUE, .desc = TRUE) {
 
   # Order group variable by total value
-  df[[group]] <- forcats::fct_reorder(df[[group]], df[[total]], .fun = max, .desc = TRUE)
+  if(reoder) df[[group]] <- forcats::fct_reorder(df[[group]], df[[total]], .fun = max, .desc = .desc)
+  else if(!is.factor(df[[group]])) df[[group]] <- as.factor(df[[group]])
 
   # Base plot
   p <- ggplot2::ggplot(df, ggplot2::aes(x = .data[[group]], y = .data[[value]], fill = .data[[segment]])) +
