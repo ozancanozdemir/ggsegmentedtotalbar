@@ -12,6 +12,7 @@ ggsegmentedtotalbar(
   total,
   alpha = 0.3,
   color = "lightgrey",
+  border_color = "black",
   label = FALSE,
   label_size = 4,
   label_color = "black"
@@ -31,6 +32,8 @@ ggsegmentedtotalbar(
 \item{alpha}{A numeric value (between 0 and 1) controlling the transparency of the background boxes. Default is 0.3.}
 
 \item{color}{A string specifying the color of the background boxes. Default is "lightgrey".}
+
+\item{border_color}{A string specifying the border color of the background boxes. Default is "black".}
 
 \item{label}{Logical. If `TRUE`, adds labels showing total values above the boxes and value labels on each segment. Default is `FALSE`.}
 
