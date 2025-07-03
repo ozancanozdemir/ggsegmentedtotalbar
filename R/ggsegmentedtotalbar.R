@@ -20,6 +20,8 @@ utils::globalVariables(".data")
 #' @param label Logical. If `TRUE`, adds labels showing total values above the boxes and value labels on each segment. Default is `FALSE`.
 #' @param label_size Numeric. Text size for the labels. Default is 4.
 #' @param label_color A string specifying the color of the labels. Default is "black".
+#' @param show_total_legend If `TRUE`, add a legend showing the total.
+#' @param name_total_legend A string specifying as the item name when adding a total to the legend. Default is "TOTAL".
 #'
 #' @return A ggplot object displaying the segmented bar plot with optional annotations and labels.
 #'
@@ -36,14 +38,15 @@ utils::globalVariables(".data")
 #' @export
 ggsegmentedtotalbar <- function(df, group, segment, value, total,
                                 alpha = 0.3, color = "lightgrey",
-                                label = FALSE, label_size = 4, label_color = "black") {
+                                label = FALSE, label_size = 4, label_color = "black",
+                                show_total_legend = FALSE, name_total_legend = "TOTAL") {
 
   # Order group variable by total value
   df[[group]] <- forcats::fct_reorder(df[[group]], df[[total]], .fun = max, .desc = TRUE)
 
   # Base plot
   p <- ggplot2::ggplot(df, ggplot2::aes(x = .data[[group]], y = .data[[value]], fill = .data[[segment]])) +
-    ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.9)) +
+    ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.9), show.legend = if(show_total_legend) TRUE else NA) +
     ggplot2::labs(title = "Segmented Total Bar Plot") +
     ggplot2::theme_minimal() +
     ggplot2::ylim(0, round(max(df[[total]]) + max(df[[total]]) * 0.15))
@@ -61,6 +64,14 @@ ggsegmentedtotalbar <- function(df, group, segment, value, total,
 
   # Combine plot and boxes
   p_final <- Reduce(`+`, c(list(p), box_grobs))
+
+  if(show_total_legend){
+    segment_name <- unique(df[[segment]])
+
+    p_final <- p_final +
+      ggplot2::scale_fill_manual(values = c(`names<-`(c(scales::hue_pal()(length(segment_name)), color), c(segment_name, name_total_legend))),
+                                 limits = c(segment_name, name_total_legend), drop = FALSE)
+  }
 
   # Add labels if requested
   if (label) {
