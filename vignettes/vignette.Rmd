@@ -53,12 +53,12 @@ The function also provides three parameters that you can use to customize the pl
   
 - `alpha`: A numeric value (between 0 and 1) controlling the transparency of the background boxes. Default is 0.3.
 - `color`: A string specifying the color of the background boxes. Default is "lightgrey".
-- `label`: Logical. If `TRUE`, adds labels showing total values above the boxes and value labels on each segment. Default is `FALSE`.
+- `value_label`: Logical. If `TRUE`, adds labels showing total values above the boxes and value labels on each segment. Default is `FALSE`.
 
 ```{r example2}
 # Create the segmented total bar plot with labels
 p <- ggsegmentedtotalbar(df_ex, "group", "segment", "value", "total",
-                         label = TRUE, label_size = 4, label_color = "black")
+                         value_label = TRUE, label_size = 4, label_color = "black")
 # Print the plot
 print(p)
 ```
@@ -66,7 +66,7 @@ print(p)
 ```{r example3}
 # Create the segmented total bar plot with labels and different total box. 
 p <- ggsegmentedtotalbar(df_ex, "group", "segment", "value", "total",
-                         label = TRUE, label_size = 4, label_color = "black",
+                         value_label = TRUE, label_size = 4, label_color = "black",
                          alpha = 0.2, color = "steelblue")
 # Print the plot
 print(p)
@@ -77,7 +77,7 @@ Apart from these parameters, you can also customize your plot by utilizing ```gg
 ```{r example4}
 # Create the segmented total bar plot with labels and different total box.
 p <- ggsegmentedtotalbar(df_ex, "group", "segment", "value", "total",
-                         label = TRUE, label_size = 4, label_color = "black",
+                         value_label = TRUE, label_size = 4, label_color = "black",
                          alpha = 0.2, color = "steelblue") +
   ggplot2::labs(title = "Segmented Total Bar Plot with Custom Annotations",
                 x = "Group", y= "Value") +
