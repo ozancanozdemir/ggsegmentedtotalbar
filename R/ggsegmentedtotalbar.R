@@ -17,6 +17,8 @@ utils::globalVariables(".data")
 #' @param total A string specifying the column name for the total variable (used for determining the background box height).
 #' @param alpha A numeric value (between 0 and 1) controlling the transparency of the background boxes. Default is 0.3.
 #' @param color A string specifying the color of the background boxes. Default is "lightgrey".
+#' @param border_color A string specifying the border color of the background boxes. Default is "black".
+#' @param label Logical. If `TRUE`, adds labels showing total values above the boxes and value labels on each segment. Default is `FALSE`.
 #' @param value_label Logical. If `TRUE`, adds labels showing values on each segment. Default is `FALSE`.
 #' @param total_label Logical. If `TRUE`, adds labels showing total values above the boxes. Default is same as `value_lavel`.
 #' @param value_vjust Numeric. adjust the alignment of values labels. Default is -0.3.
@@ -38,6 +40,8 @@ utils::globalVariables(".data")
 #'
 #' @export
 ggsegmentedtotalbar <- function(df, group, segment, value, total,
+                                alpha = 0.3, color = "lightgrey", border_color = "black",
+                                label = FALSE, label_size = 4, label_color = "black") {
                                 alpha = 0.3, color = "lightgrey",
                                 value_label = FALSE, total_label = value_label,
                                 value_vjust = -0.3, total_vjust = -0.5,
@@ -67,7 +71,7 @@ ggsegmentedtotalbar <- function(df, group, segment, value, total,
     current_category <- levels(df[[group]])[i]
     y_value <- df[[total]][df[[group]] == current_category][1]
     ggplot2::annotation_custom(
-      grob = grid::rectGrob(gp = grid::gpar(fill = color, alpha = alpha)),
+      grob = grid::rectGrob(gp = grid::gpar(col = border_color, fill = color, alpha = alpha)),
       xmin = i - 0.47, xmax = i + 0.47,
       ymin = 0, ymax = y_value
     )
