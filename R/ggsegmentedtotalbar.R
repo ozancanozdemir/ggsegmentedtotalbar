@@ -19,6 +19,10 @@ utils::globalVariables(".data")
 #' @param color A string specifying the color of the background boxes. Default is "lightgrey".
 #' @param border_color A string specifying the border color of the background boxes. Default is "black".
 #' @param label Logical. If `TRUE`, adds labels showing total values above the boxes and value labels on each segment. Default is `FALSE`.
+#' @param value_label Logical. If `TRUE`, adds labels showing values on each segment. Default is `FALSE`.
+#' @param total_label Logical. If `TRUE`, adds labels showing total values above the boxes. Default is same as `value_lavel`.
+#' @param value_vjust Numeric. adjust the alignment of values labels. Default is -0.3.
+#' @param total_vjust Numeric. adjust the alignment of total values labels. Default is -0.5.
 #' @param label_size Numeric. Text size for the labels. Default is 4.
 #' @param label_color A string specifying the color of the labels. Default is "black".
 #'
@@ -32,22 +36,35 @@ utils::globalVariables(".data")
 #'   total = rep(c(739, 692, 503, 392), each = 3)
 #' )
 #' ggsegmentedtotalbar(df_ex, group = "group", segment = "segment",
-#'                     value = "value", total = "total", label = TRUE)
+#'                     value = "value", total = "total", value_label = TRUE)
 #'
 #' @export
 ggsegmentedtotalbar <- function(df, group, segment, value, total,
                                 alpha = 0.3, color = "lightgrey", border_color = "black",
                                 label = FALSE, label_size = 4, label_color = "black") {
+                                alpha = 0.3, color = "lightgrey",
+                                value_label = FALSE, total_label = value_label,
+                                value_vjust = -0.3, total_vjust = -0.5,
+                                label_size = 4, label_color = "black") {
 
   # Order group variable by total value
   df[[group]] <- forcats::fct_reorder(df[[group]], df[[total]], .fun = max, .desc = TRUE)
+
+  y_max <- max(df[[value]], df[[total]], na.rm = TRUE)
+  y_min <- min(df[[value]], df[[total]], na.rm = TRUE)
+
+  if(y_max >= 0) y_max <- round(y_max + y_max * 0.15)
+  else y_max <- 0
+
+  if(y_min >= 0) y_min <- 0
+  else y_min <- round(y_min + y_min * 0.15)
 
   # Base plot
   p <- ggplot2::ggplot(df, ggplot2::aes(x = .data[[group]], y = .data[[value]], fill = .data[[segment]])) +
     ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.9)) +
     ggplot2::labs(title = "Segmented Total Bar Plot") +
     ggplot2::theme_minimal() +
-    ggplot2::ylim(0, round(max(df[[total]]) + max(df[[total]]) * 0.15))
+    ggplot2::ylim(y_min, y_max)
 
   # Background boxes (rectGrob)
   box_grobs <- lapply(seq_along(levels(df[[group]])), function(i) {
@@ -64,7 +81,7 @@ ggsegmentedtotalbar <- function(df, group, segment, value, total,
   p_final <- Reduce(`+`, c(list(p), box_grobs))
 
   # Add labels if requested
-  if (label) {
+  if (total_label) {
     # Total labels (one per group)
     label_data_total <- df[!duplicated(df[[group]]), c(group, total)]
     label_data_total[[group]] <- factor(label_data_total[[group]], levels = levels(df[[group]]))
@@ -73,10 +90,13 @@ ggsegmentedtotalbar <- function(df, group, segment, value, total,
       ggplot2::geom_text(data = label_data_total,
                          ggplot2::aes(x = .data[[group]], y = .data[[total]], label = .data[[total]]),
                          inherit.aes = FALSE,
-                         vjust = -0.5, size = label_size, color = label_color) +
+                         vjust = ifelse(label_data_total[[total]] >= 0, total_vjust, 1 - total_vjust), size = label_size, color = label_color)
+  }
+  if (value_label) {
+    p_final <- p_final +
       ggplot2::geom_text(ggplot2::aes(label = .data[[value]]),
                          position = ggplot2::position_dodge(width = 0.9),
-                         vjust = -0.3, size = label_size, color = label_color)
+                         vjust = ifelse(df[[value]] >= 0, value_vjust, 1 - value_vjust), size = label_size, color = label_color)
   }
 
   return(p_final)
