@@ -25,6 +25,8 @@ utils::globalVariables(".data")
 #' @param total_vjust Numeric. adjust the alignment of total values labels. Default is -0.5.
 #' @param label_size Numeric. Text size for the labels. Default is 4.
 #' @param label_color A string specifying the color of the labels. Default is "black".
+#' @param show_total_legend If `TRUE`, add a legend showing the total.
+#' @param name_total_legend A string specifying as the item name when adding a total to the legend. Default is "TOTAL".
 #'
 #' @return A ggplot object displaying the segmented bar plot with optional annotations and labels.
 #'
@@ -40,6 +42,9 @@ utils::globalVariables(".data")
 #'
 #' @export
 ggsegmentedtotalbar <- function(df, group, segment, value, total,
+                                alpha = 0.3, color = "lightgrey",
+                                label = FALSE, label_size = 4, label_color = "black",
+                                show_total_legend = FALSE, name_total_legend = "TOTAL") {
                                 alpha = 0.3, color = "lightgrey", border_color = "black",
                                 label = FALSE, label_size = 4, label_color = "black") {
                                 alpha = 0.3, color = "lightgrey",
@@ -61,6 +66,7 @@ ggsegmentedtotalbar <- function(df, group, segment, value, total,
 
   # Base plot
   p <- ggplot2::ggplot(df, ggplot2::aes(x = .data[[group]], y = .data[[value]], fill = .data[[segment]])) +
+    ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.9), show.legend = if(show_total_legend) TRUE else NA) +
     ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.9), alpha = 1) +
     ggplot2::labs(title = "Segmented Total Bar Plot") +
     ggplot2::theme_minimal() +
@@ -81,6 +87,14 @@ ggsegmentedtotalbar <- function(df, group, segment, value, total,
   p_final <- Reduce(`+`, c(list(p), box_grobs))
   p_final <- p_final +
     ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.9))
+
+  if(show_total_legend){
+    segment_name <- unique(df[[segment]])
+
+    p_final <- p_final +
+      ggplot2::scale_fill_manual(values = c(`names<-`(c(scales::hue_pal()(length(segment_name)), color), c(segment_name, name_total_legend))),
+                                 limits = c(segment_name, name_total_legend), drop = FALSE)
+  }
 
   # Add labels if requested
   if (total_label) {

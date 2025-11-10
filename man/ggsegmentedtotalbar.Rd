@@ -19,7 +19,9 @@ ggsegmentedtotalbar(
   value_vjust = -0.3,
   total_vjust = -0.5,
   label_size = 4,
-  label_color = "black"
+  label_color = "black",
+  show_total_legend = FALSE,
+  name_total_legend = "TOTAL"
 )
 }
 \arguments{
@@ -51,6 +53,10 @@ ggsegmentedtotalbar(
 \item{label_size}{Numeric. Text size for the labels. Default is 4.}
 
 \item{label_color}{A string specifying the color of the labels. Default is "black".}
+
+\item{show_total_legend}{If `TRUE`, add a legend showing the total.}
+
+\item{name_total_legend}{A string specifying as the item name when adding a total to the legend. Default is "TOTAL".}
 }
 \value{
 A ggplot object displaying the segmented bar plot with optional annotations and labels.
