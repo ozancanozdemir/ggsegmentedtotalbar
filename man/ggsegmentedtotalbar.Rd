@@ -12,7 +12,12 @@ ggsegmentedtotalbar(
   total,
   alpha = 0.3,
   color = "lightgrey",
+  border_color = "black",
   label = FALSE,
+  value_label = FALSE,
+  total_label = value_label,
+  value_vjust = -0.3,
+  total_vjust = -0.5,
   label_size = 4,
   label_color = "black",
   show_total_legend = FALSE,
@@ -34,7 +39,16 @@ ggsegmentedtotalbar(
 
 \item{color}{A string specifying the color of the background boxes. Default is "lightgrey".}
 
+\item{border_color}{A string specifying the border color of the background boxes. Default is "black".}
+
 \item{label}{Logical. If `TRUE`, adds labels showing total values above the boxes and value labels on each segment. Default is `FALSE`.}
+\item{value_label}{Logical. If `TRUE`, adds labels showing values on each segment. Default is `FALSE`.}
+
+\item{total_label}{Logical. If `TRUE`, adds labels showing total values above the boxes. Default is same as `value_lavel`.}
+
+\item{value_vjust}{Numeric. adjust the alignment of values labels. Default is -0.3.}
+
+\item{total_vjust}{Numeric. adjust the alignment of total values labels. Default is -0.5.}
 
 \item{label_size}{Numeric. Text size for the labels. Default is 4.}
 
@@ -65,6 +79,6 @@ df_ex <- data.frame(
   total = rep(c(739, 692, 503, 392), each = 3)
 )
 ggsegmentedtotalbar(df_ex, group = "group", segment = "segment",
-                    value = "value", total = "total", label = TRUE)
+                    value = "value", total = "total", value_label = TRUE)
 
 }
