@@ -29,7 +29,7 @@ ggsegmentedtotalbar(
 
 \item{value}{A string specifying the column name for the value variable (used for the bar heights).}
 
-\item{total}{A string specifying the column name for the total variable (used for determining the background box height).}
+\item{total}{A string specifying the column name for the total variable (used for determining the background box height). If not specified, the sum of values for each group is used.}
 
 \item{alpha}{A numeric value (between 0 and 1) controlling the transparency of the background boxes. Default is 0.3.}
 
